@@ -49,7 +49,7 @@ def clean_text(text: str) -> str:
     text = normalize_unicode(text)
     # Remove URLs
     text = URL_PATTERN.sub("", text)
-    # Remove emojis 
+    # Remove emojis
     text = EMOJI_PATTERN.sub("", text)
     # Remove mentions
     text = MENTION_PATTERN.sub("", text)
