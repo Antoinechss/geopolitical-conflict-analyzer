@@ -61,8 +61,6 @@ def clean_text(text: str) -> str:
     text = MULTI_SPACE_PATTERN.sub(" ", text)
     # Remove excessive repeated punctuation
     text = PUNCTUATION_REPEAT_PATTERN.sub(r"\1", text)
-    # Lowercase
-    text = text.strip().lower()
 
     return text
 

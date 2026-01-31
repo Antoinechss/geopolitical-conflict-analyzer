@@ -1,6 +1,5 @@
-
 # time span for fetching posts 
-CUTOFF = 48 # Fetching t-48h 
+CUTOFF = 30 * 7 * 24  # 30 weeks in hours
 
 # Telegram Specific Configs 
 telegram_channels = ["worldnews"]
