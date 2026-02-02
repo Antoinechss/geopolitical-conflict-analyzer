@@ -72,7 +72,6 @@ def extract_event_sentences(text: str) -> list[str]:
 def main():
     conn = get_connection()
 
-    # 1️⃣ Load pending events
     with conn.cursor() as cur:
         cur.execute(
             """
@@ -87,7 +86,6 @@ def main():
 
     print(f"Selected {len(events)} pending events")
 
-    # 2️⃣ Process events
     for event_id, text in events:
         print(f"\n▶ Event {event_id}")
 
@@ -126,7 +124,6 @@ def main():
                     print(f"    ⚠ skipping sentence {i}")
                     continue
 
-            # 3️⃣ Decide event outcome
             if not rows:
                 raise RuntimeError("No valid extractions in event")
 
@@ -147,7 +144,6 @@ def main():
             print(f"✖ failed: {e}")
 
     conn.close()
-
 
 
 if __name__ == "__main__":

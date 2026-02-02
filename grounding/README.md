@@ -5,7 +5,6 @@ states.json
 
 states.json contains UN member states plus UN observer states (Holy See and State of Palestine), totaling approximately 195 internationally recognized sovereign entities. The file intentionally excludes disputed territories and subnational regions.
 
-
 193 UN members + Holy See (Vatican) + Palestine = 195 entries
 
 SPARQL Wikidata Query Service 
