@@ -8,3 +8,4 @@ DB_CONFIG = {
 
 OLLAMA_MODEL = "mistral:instruct"
 BATCH_SIZE = 50
+

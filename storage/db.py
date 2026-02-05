@@ -1,17 +1,24 @@
 import psycopg2
 import os
 from psycopg2.extras import execute_values
-from analysis.actor_target_detection.config import DB_CONFIG, OLLAMA_MODEL, BATCH_SIZE
+from analysis.actor_target_detection.config import BATCH_SIZE
+from contextlib import contextmanager
 
 
+@contextmanager
 def get_connection():
-    return psycopg2.connect(
+    conn = psycopg2.connect(
         database=os.getenv("DB_NAME"),
         user=os.getenv("DB_USER"),
         password=os.getenv("DB_PASSWORD"),
         host=os.getenv("DB_HOST", "localhost"),
         port=os.getenv("DB_PORT", 5432),
     )
+    try:
+        yield conn
+    finally:
+        conn.close()
+
 
 
 def fetch_events(conn):

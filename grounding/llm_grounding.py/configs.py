@@ -1,0 +1,4 @@
+BATCH_SIZE = 10
+SLEEP_SECONDS = 0.0
+MAX_RETRIES = 2
+LLM_RUNNER_CMD = "python llm_runner.py"

@@ -3,7 +3,7 @@
 ## DATA SOURCING
 ---------------------------------------------
 
-### Entity Types (V1)
+### Entities (V1)
 ---------------------------------------------
 
 | Type | Description | Examples | Sources | 
@@ -14,6 +14,10 @@
 | NON_STATE_ACTOR | Armed groups, militias | Hamas, ISIS | ACLED lists + Wikidata |
 | ORG | Companies, institutions | Gazprom, Lockheed Martin | Wikidata |
 | LOCATION | Cities, regions | Gaza, Donetsk | GeoNames + Wikidata |
+
+### Grounding of entities
+
+Using Wikidata
 
 ## ANALYSIS 
 

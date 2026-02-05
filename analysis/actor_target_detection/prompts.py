@@ -33,7 +33,6 @@ TERRORISM
 UNDEFINED"""
 
 
-
 def build_prompt(sentence: str) -> str:
     return f"""{SYSTEM_PROMPT}
 

@@ -104,12 +104,7 @@ def main():
                         llm_output = llm_extract(prompt)
 
                         try:
-                            row = parse_llm_output(
-                                llm_output,
-                                event_id,
-                                i,
-                                sentence
-                            )
+                            row = parse_llm_output(llm_output, event_id, i, sentence)
                             break
                         except ValueError:
                             if attempt == 2:
@@ -132,10 +127,7 @@ def main():
             mark_event_done(conn, event_id)
             conn.commit()
 
-            print(
-                f"✔ done ({len(rows)} rows, "
-                f"{sentence_errors} sentence errors)"
-            )
+            print(f"✔ done ({len(rows)} rows, " f"{sentence_errors} sentence errors)")
 
         except Exception as e:
             conn.rollback()
