@@ -1,16 +1,23 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from storage.db import get_connection
-from storage.refresh_db import full_reboot_events, incremental_refresh_events, fetch_events_for_period
+from storage.refresh_db import (
+    full_reboot_events,
+    incremental_refresh_events,
+    fetch_events_for_period,
+)
 from ingestion.configs.time_windows import (
     FULL_REBOOT_MONTHS,
     INCREMENTAL_REFRESH_MONTHS,
 )
 from api.schemas import FetchPeriodRequest
+from api.globe import fetch_globe_relations
 from storage.jobs import start_job, finish_job, fail_job, is_job_running
 from llm_actor_target_processing.processor import process
 from llm_actor_target_processing.row_selectors import ProcessingMode
-
-
+from api.queries.relations import fetch_relations
+from typing import Optional
+from fastapi import Query
+from datetime import date
 
 
 
@@ -28,23 +35,17 @@ async def reboot_full():
 @router.post("/refresh-incremental")
 async def refresh_incremental():
     await incremental_refresh_events(INCREMENTAL_REFRESH_MONTHS)
-    return {
-        "status": "completed",
-        "months_back": INCREMENTAL_REFRESH_MONTHS
-    }
+    return {"status": "completed", "months_back": INCREMENTAL_REFRESH_MONTHS}
 
 
 # Custom period option
 @router.post("/fetch-period")
 async def fetch_period(payload: FetchPeriodRequest):
-    await fetch_events_for_period(
-        payload.start_date,
-        payload.end_date
-    )
+    await fetch_events_for_period(payload.start_date, payload.end_date)
     return {
         "status": "completed",
         "start_date": payload.start_date,
-        "end_date": payload.end_date
+        "end_date": payload.end_date,
     }
 
 
@@ -69,7 +70,9 @@ def job_status(job_name: str):
         "error": row[3],
     }
 
+
 # -------------------- LLM Processing Routes -------------
+
 
 async def run_llm_processing_job(mode, limit):
     """
@@ -81,6 +84,7 @@ async def run_llm_processing_job(mode, limit):
         finish_job("llm_processing")
     except Exception as e:
         fail_job("llm_processing", str(e))
+
 
 # LLM processing of raw events
 @router.post("/process")
@@ -107,3 +111,18 @@ async def process_events(
         "status": "started",
         "job_name": "llm_processing",
     }
+
+
+# -------------------- Globe visualization -------------
+
+# Building arcs 
+@router.get("/globe/relations")
+def globe_relations():
+    return fetch_globe_relations()
+
+@router.get("/relations")
+def get_relations(
+    from_date: Optional[date] = Query(None, alias="from"),
+    to_date: Optional[date] = Query(None, alias="to"),
+):
+    return fetch_relations(from_date=from_date, to_date=to_date)

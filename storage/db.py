@@ -1,11 +1,13 @@
 import psycopg2
 import os
 from psycopg2.extras import execute_values
-from analysis.actor_target_detection.config import BATCH_SIZE
 from contextlib import contextmanager
 
 from dotenv import load_dotenv
 load_dotenv()
+
+# Default batch size for fetching events
+BATCH_SIZE = 100
 
 
 @contextmanager

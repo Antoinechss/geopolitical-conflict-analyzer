@@ -117,6 +117,8 @@ async def process(
                     target=target,
                     event_type=event_type,
                 )
+                # Update local variables so grounding can run in same iteration
+                print(f"[row {row_id}] extracted: actor={actor}, target={target}, event_type={event_type}")
 
         # ---- GROUNDING (if missing) ----
         print(
@@ -139,6 +141,7 @@ async def process(
                 actor_state=grounded["actor_state"],
                 target_state=grounded["target_state"],
             )
+            print(f"[row {row_id}] grounded: actor_state={grounded['actor_state']}, target_state={grounded['target_state']}")
 
         processed += 1
 
