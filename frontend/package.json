@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@deck.gl/core": "^9.2.6",
+    "@deck.gl/layers": "^9.2.6",
+    "@deck.gl/react": "^9.2.6",
+    "@luma.gl/engine": "^9.2.6",
+    "deck.gl": "^9.2.6",
+    "maplibre-gl": "^5.17.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.30.3"
+  }
+}

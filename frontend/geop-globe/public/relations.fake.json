@@ -1,0 +1,47 @@
+[
+  {
+    "id": "tw_0001",
+    "source": "USA",
+    "target": "CHN",
+    "type": "diplomatic_statement",
+    "weight": 0.6,
+    "timestamp": "2024-11-18T14:32:00Z",
+    "tweet_id": "173902341234"
+  },
+  {
+    "id": "tw_0002",
+    "source": "RUS",
+    "target": "UKR",
+    "type": "military_threat",
+    "weight": 0.9,
+    "timestamp": "2024-11-20T08:10:00Z",
+    "tweet_id": "173945612345"
+  },
+  {
+    "id": "tw_0003",
+    "source": "FRA",
+    "target": "ISR",
+    "type": "diplomatic_support",
+    "weight": 0.4,
+    "timestamp": "2024-11-22T18:45:00Z",
+    "tweet_id": "173998723456"
+  },
+  {
+    "id": "tw_0004",
+    "source": "IRN",
+    "target": "USA",
+    "type": "hostile_statement",
+    "weight": 0.7,
+    "timestamp": "2024-11-25T11:30:00Z",
+    "tweet_id": "174045834567"
+  },
+  {
+    "id": "tw_0005",
+    "source": "CHN",
+    "target": "TWN",
+    "type": "territorial_claim",
+    "weight": 0.8,
+    "timestamp": "2024-11-28T21:00:00Z",
+    "tweet_id": "174089945678"
+  }
+]
