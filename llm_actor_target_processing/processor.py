@@ -1,13 +1,13 @@
-from typing import Optional, Iterable
-from storage.db import get_connection
-import asyncio
 from typing import Optional
+from storage.db import get_connection
 
 from llm_actor_target_processing.row_selectors import select_rows, ProcessingMode
 from llm_actor_target_processing.extract import extract_actor_target_from_text
 from llm_actor_target_processing.ground import resolve_states
 from llm_actor_target_processing.llm_client import OllamaClient
-from storage.db import get_connection
+from llm_actor_target_processing.initializer import (
+    initialize_actortargetevents,
+)
 
 
 def update_extraction(
@@ -61,14 +61,21 @@ async def process(
     """
     Unified LLM processing pipeline.
 
+    - Initializes new rows from events table
     - Selects rows based on mode
     - Runs extraction if missing
     - Runs grounding if missing
     - Updates DB
     """
+    
+    # Step 1: Initialize new rows from events table
+    print("[processor] initializing new rows from events table...")
+    init_result = initialize_actortargetevents(limit=limit)
+    print(f"[processor] initialized {init_result['inserted']} new rows")
 
     client = OllamaClient()
 
+    # Step 2: Select rows to process
     rows = select_rows(mode=mode, limit=limit)
     print(f"[processor] selected {len(rows)} rows")
 
