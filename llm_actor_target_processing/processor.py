@@ -37,6 +37,8 @@ def update_grounding(
     row_id: int,
     actor_state: Optional[str],
     target_state: Optional[str],
+    actor_state_iso3: Optional[str],
+    target_state_iso3: Optional[str],
 ):
     with get_connection() as conn:
         with conn.cursor() as cur:
@@ -45,10 +47,12 @@ def update_grounding(
                 UPDATE actortargetevents
                 SET actor_state = %s,
                     target_state = %s,
+                    actor_state_iso3 = %s,
+                    target_state_iso3 = %s,
                     states_resolved = TRUE
                 WHERE id = %s;
                 """,
-                (actor_state, target_state, row_id),
+                (actor_state, target_state, actor_state_iso3, target_state_iso3, row_id),
             )
         conn.commit()
 
@@ -85,9 +89,13 @@ async def process(
     # load states whitelist ONCE per run
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT name FROM states;")
-            states_list = [r[0] for r in cur.fetchall()]
+            cur.execute("SELECT name, id FROM states;")
+            states_data = cur.fetchall()
+    
+    states_list = [name for name, _ in states_data]
     states_set = set(states_list)
+    # Create name -> ISO3 mapping
+    states_iso_map = {name: iso3 for name, iso3 in states_data}
 
     processed = 0
 
@@ -143,12 +151,20 @@ async def process(
                 sentence_text=sentence_text,
             )
 
+            # Look up ISO3 codes from the state names
+            actor_state = grounded["actor_state"]
+            target_state = grounded["target_state"]
+            actor_state_iso3 = states_iso_map.get(actor_state) if actor_state else None
+            target_state_iso3 = states_iso_map.get(target_state) if target_state else None
+
             update_grounding(
                 row_id=row_id,
-                actor_state=grounded["actor_state"],
-                target_state=grounded["target_state"],
+                actor_state=actor_state,
+                target_state=target_state,
+                actor_state_iso3=actor_state_iso3,
+                target_state_iso3=target_state_iso3,
             )
-            print(f"[row {row_id}] grounded: actor_state={grounded['actor_state']}, target_state={grounded['target_state']}")
+            print(f"[row {row_id}] grounded: actor_state={actor_state} ({actor_state_iso3}), target_state={target_state} ({target_state_iso3})")
 
         processed += 1
 
