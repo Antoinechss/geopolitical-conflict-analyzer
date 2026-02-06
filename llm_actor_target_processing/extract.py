@@ -28,12 +28,16 @@ def parse_llm_output(
 ) -> Optional[Tuple[str, int, str, Optional[str], Optional[str], str]]:
     obj = extract_json_object(llm_output)
     if not obj:
+        print(f"[parse] No JSON found in output")
         raise ValueError("Invalid JSON")
 
-    event_type = obj.get("event")
+    print(f"[parse] Extracted JSON: {obj}")
+    
     actor = _normalize_field(obj.get("actor"))
     target = _normalize_field(obj.get("target"))
     event_type = _normalize_field(obj.get("event"))
+
+    print(f"[parse] Normalized - actor: {actor}, target: {target}, event: {event_type}")
 
     if not event_type or event_type == "UNDEFINED":
         return None
@@ -71,6 +75,8 @@ async def extract_actor_target_from_text(
 
         # first attempt
         llm_output = await client.run(prompt)
+        print(f"[extract] sentence: {sentence_text[:50]}...")
+        print(f"[extract] LLM output: {llm_output[:200]}...")
 
         try:
             row = parse_llm_output(
@@ -79,7 +85,12 @@ async def extract_actor_target_from_text(
                 sentence_index,
                 sentence_text,
             )
-        except ValueError:
+            if row:
+                print(f"[extract] parsed: actor={row[3]}, target={row[4]}, event={row[5]}")
+            else:
+                print(f"[extract] returned None (no event or UNDEFINED)")
+        except ValueError as e:
+            print(f"[extract] parse error: {e}, trying repair...")
             # one repair attempt
             repair_prompt = (
                 "Fix the JSON below. Do NOT change any values. "
@@ -88,17 +99,23 @@ async def extract_actor_target_from_text(
             )
 
             llm_output = await client.run(repair_prompt)
+            print(f"[extract] repair output: {llm_output[:200]}...")
             row = parse_llm_output(
                 llm_output,
                 event_id,
                 sentence_index,
                 sentence_text,
             )
+            if row:
+                print(f"[extract] repaired: actor={row[3]}, target={row[4]}, event={row[5]}")
+            else:
+                print("[extract] repair returned None")
 
         if row:
             rows.append(row)
 
     return rows
+
 
 def _normalize_field(value) -> Optional[str]:
     """
