@@ -3,7 +3,7 @@ import re
 
 from llm_actor_target_processing.llm_client import OllamaClient
 from llm_actor_target_processing.helpers import extract_json_object
-from analysis.actor_target_detection.prompts import build_prompt
+from llm_actor_target_processing.prompts_extract import build_prompt
 
 # -------------------------
 # Sentence splitting
