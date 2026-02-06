@@ -89,7 +89,7 @@ async def process(
     # load states whitelist ONCE per run
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT name, id FROM states;")
+            cur.execute("SELECT name, iso3 FROM states;")
             states_data = cur.fetchall()
     
     states_list = [name for name, _ in states_data]
