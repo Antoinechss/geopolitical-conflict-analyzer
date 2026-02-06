@@ -66,3 +66,18 @@ def is_job_running(job_name: str) -> bool:
 
     return row is not None and row[0] == "running"
 
+
+def reset_job(job_name: str):
+    """Reset a stuck job to allow it to run again."""
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                UPDATE jobs
+                SET status = 'cancelled',
+                    finished_at = NOW()
+                WHERE job_name = %s;
+                """,
+                (job_name,),
+            )
+        conn.commit()

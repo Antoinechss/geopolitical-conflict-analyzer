@@ -71,6 +71,14 @@ def job_status(job_name: str):
     }
 
 
+# Reset/cancel a stuck job
+@router.post("/jobs/{job_name}/reset")
+def reset_job_endpoint(job_name: str):
+    from storage.jobs import reset_job
+    reset_job(job_name)
+    return {"status": "reset", "job_name": job_name}
+
+
 # -------------------- LLM Processing Routes -------------
 
 
