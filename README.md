@@ -1,6 +1,14 @@
 # Geopolitical Conflict Analyzer
 
-An automated pipeline for extracting, analyzing, and visualizing geopolitical events from social media sources using Large Language Models and interactive 3D visualization.
+An automated pipeline for extracting, analyzing, and visualizing geopolitical actor-target relations from social media sources using Large Language Models and interactive 3D visualization.
+
+## Screenshots
+
+### 3D Globe Visualization
+![Globe Visualization](screenshots/globe.png)
+
+### Admin Dashboard
+![Homepage](screenshots/homepage.png)
 
 ## Overview
 
@@ -50,7 +58,7 @@ pip install -r requirements.txt
 
 # Configure environment variables
 cp .env.example .env
-# Edit .env with your database credentials and API keys
+# Edit .env with database credentials and API keys
 
 # Start server
 uvicorn app.main:app --reload
@@ -140,36 +148,3 @@ OLLAMA_BASE_URL=http://localhost:11434
 ```javascript
 const API_BASE = "http://127.0.0.1:8000/api";
 ```
-
-## Development
-
-### Running Tests
-```bash
-cd backend
-pytest
-```
-
-### Code Quality
-```bash
-# Backend
-flake8 .
-black .
-
-# Frontend
-npm run lint
-```
-
-## Legal and Ethical Notice
-
-- Source content originates from publicly accessible Telegram channels
-- No private, restricted, or paywalled content is included
-- Data is processed for research and analytical purposes only
-- Users are responsible for compliance with applicable data protection regulations
-
-## License
-
-This project is provided for research and educational purposes.
-
-## Contributing
-
-Contributions are welcome. Please open an issue or submit a pull request for any improvements or bug fixes.
